@@ -27,8 +27,8 @@ public class LibSholatTime {
     public LibSholatTime() {
         this.nowTime = Calendar.getInstance();
         nowTime.setTime(new Date());
-        this.latitude = new Double(0);
-        this.langitude = new Double(0);
+        this.latitude = Double.valueOf(0);
+        this.langitude = Double.valueOf(0);
         this.subuhDegree = 20;
         this.isyaDegree = 18;
         this.timeZone = 1;
@@ -36,8 +36,8 @@ public class LibSholatTime {
         this.ashrShadow = 1;
     }
 
-    public LibSholatTime(Double langitude, Double latitude, Integer timeZone,
-            Integer altitude, Integer subuhDegree, Integer isyaDegree, CalculationMethod method) {
+    public LibSholatTime(Double langitude, Double latitude, Integer timeZone, Integer altitude, Integer subuhDegree,
+            Integer isyaDegree, CalculationMethod method) {
         this.latitude = latitude;
         this.langitude = langitude;
         this.timeZone = timeZone;
@@ -105,19 +105,16 @@ public class LibSholatTime {
     }
 
     public Double getFajrTime() {
-        return this.getZuhurTime() - (12 / Math.PI)
-                * Math.acos((Math.sin(-1 * this.getSubuhDegree() * Math.PI / 180)
-                - Math.sin(this.getSunDeclinationRadians())
-                * Math.sin(this.getLatitudeRadians())) / (Math.cos(this.getSunDeclinationRadians())
-                * Math.cos(this.getLatitudeRadians())));
+        return this.getZuhurTime() - (12 / Math.PI) * Math.acos((Math.sin(-1 * this.getSubuhDegree() * Math.PI / 180)
+                - Math.sin(this.getSunDeclinationRadians()) * Math.sin(this.getLatitudeRadians()))
+                / (Math.cos(this.getSunDeclinationRadians()) * Math.cos(this.getLatitudeRadians())));
     }
 
     public Double getDawnTime() {
         return this.getZuhurTime() - (12 / Math.PI)
-                * Math.acos((Math.sin((-0.8333 - 0.0347 * Math.sqrt(this.getAltitude()))
-                * Math.PI / 180) - Math.sin(this.getSunDeclinationRadians())
-                * Math.sin(this.getLatitudeRadians())) / (Math.cos(this.getSunDeclinationRadians())
-                * Math.cos(this.getLatitudeRadians())));
+                * Math.acos((Math.sin((-0.8333 - 0.0347 * Math.sqrt(this.getAltitude())) * Math.PI / 180)
+                        - Math.sin(this.getSunDeclinationRadians()) * Math.sin(this.getLatitudeRadians()))
+                        / (Math.cos(this.getSunDeclinationRadians()) * Math.cos(this.getLatitudeRadians())));
     }
 
     public String timeConverter(Double timeToConvert) {
@@ -134,46 +131,37 @@ public class LibSholatTime {
 
     public Double getAshrTime() {
         // Need to add support for Hanafi.
-        return this.getZuhurTime()
-                + (12 / Math.PI)
-                * Math.acos((Math.sin(Math.atan(1 / (this.ashrShadow + Math.tan(Math.abs(this.getLatitudeRadians()
-                - this.getSunDeclinationRadians())))))
-                - Math.sin(this.getSunDeclinationRadians())
-                * Math.sin(this.getLatitudeRadians())) / (Math.cos(this.getSunDeclinationRadians())
-                * Math.cos(this.getLatitudeRadians())));
+        return this.getZuhurTime() + (12 / Math.PI) * Math.acos((Math.sin(Math.atan(1
+                / (this.ashrShadow + Math.tan(Math.abs(this.getLatitudeRadians() - this.getSunDeclinationRadians())))))
+                - Math.sin(this.getSunDeclinationRadians()) * Math.sin(this.getLatitudeRadians()))
+                / (Math.cos(this.getSunDeclinationRadians()) * Math.cos(this.getLatitudeRadians())));
     }
 
     public Double getMaghribTime() {
-        return this.getZuhurTime()
-                + (12 / Math.PI)
-                * Math.acos((Math.sin((-0.8333 - 0.0347
-                * Math.sqrt(this.getAltitude())) * Math.PI / 180)
-                - Math.sin(this.getSunDeclinationRadians())
-                * Math.sin(this.getLatitudeRadians())) / (Math.cos(this.getSunDeclinationRadians())
-                * Math.cos(this.getLatitudeRadians())));
+        return this.getZuhurTime() + (12 / Math.PI)
+                * Math.acos((Math.sin((-0.8333 - 0.0347 * Math.sqrt(this.getAltitude())) * Math.PI / 180)
+                        - Math.sin(this.getSunDeclinationRadians()) * Math.sin(this.getLatitudeRadians()))
+                        / (Math.cos(this.getSunDeclinationRadians()) * Math.cos(this.getLatitudeRadians())));
     }
 
     public Double getIshaTime() {
-        return this.getZuhurTime()
-                + (12 / Math.PI)
-                * Math.acos((Math.sin(-1 * this.getIsyaDegree() * Math.PI / 180)
-                - Math.sin(this.getSunDeclinationRadians())
-                * Math.sin(this.getLatitudeRadians())) / (Math.cos(this.getSunDeclinationRadians())
-                * Math.cos(this.getLatitudeRadians())));
+        return this.getZuhurTime() + (12 / Math.PI) * Math.acos((Math.sin(-1 * this.getIsyaDegree() * Math.PI / 180)
+                - Math.sin(this.getSunDeclinationRadians()) * Math.sin(this.getLatitudeRadians()))
+                / (Math.cos(this.getSunDeclinationRadians()) * Math.cos(this.getLatitudeRadians())));
     }
 
     public void setCalculation(CalculationMethod method) {
 
         switch (method) {
-            case HANAFI:
-                this.ashrShadow = 2;
-                break;
-            case SHAFII:
-                this.ashrShadow = 1;
-                break;
-            default:
-                this.ashrShadow = 1;
-                break;
+        case HANAFI:
+            this.ashrShadow = 2;
+            break;
+        case SHAFII:
+            this.ashrShadow = 1;
+            break;
+        default:
+            this.ashrShadow = 1;
+            break;
         }
 
     }
@@ -221,13 +209,12 @@ public class LibSholatTime {
     }
 
     private Double getUniversalTimeOnJulianDate() {
-        Double val = new Double(0);
+        Double val = Double.valueOf(0);
         Double year = 365.25 * this.getYear();
         Double month = 30.60001 * (this.getMonth() + 1);
 
-        val = Double.valueOf("1720994.5") + year.intValue() + month.intValue()
-                + this.getVarB().doubleValue() + this.getDate().doubleValue()
-                + 12 / 24;
+        val = Double.valueOf("1720994.5") + year.intValue() + month.intValue() + this.getVarB().doubleValue()
+                + this.getDate().doubleValue() + 12 / 24;
         return val;
     }
 
@@ -236,8 +223,7 @@ public class LibSholatTime {
     }
 
     private Double getRadianOnDate() {
-        return 2 * Math.PI * (this.getLocalTimeOnJulianDate(this.timeZone) - 2451545)
-                / 365.25;
+        return 2 * Math.PI * (this.getLocalTimeOnJulianDate(this.timeZone) - 2451545) / 365.25;
     }
 
     private Double getVarU() {
@@ -249,8 +235,7 @@ public class LibSholatTime {
     }
 
     private Double getSunDeclination() {
-        return 0.37877
-                + 23.264 * Math.sin((57.297 * this.getRadianOnDate() - 79.547) * Math.PI / 180)
+        return 0.37877 + 23.264 * Math.sin((57.297 * this.getRadianOnDate() - 79.547) * Math.PI / 180)
                 + 0.3812 * Math.sin((2 * 57.297 * this.getRadianOnDate() - 82.682) * Math.PI / 180)
                 + 0.17132 * Math.sin((3 * 57.297 * this.getRadianOnDate() - 59.722) * Math.PI / 180);
     }
@@ -265,8 +250,7 @@ public class LibSholatTime {
                 + (9934 - 14 * this.getVarU()) * Math.sin(2 * this.getL0())
                 - (29 + 5 * this.getVarU()) * Math.cos(2 * this.getL0())
                 + (74 + 10 * this.getVarU()) * Math.sin(3 * this.getL0())
-                + (320 - 4 * this.getVarU()) * Math.cos(3 * this.getL0())
-                - 212 * Math.sin(4 * this.getL0())) / 1000;
+                + (320 - 4 * this.getVarU()) * Math.cos(3 * this.getL0()) - 212 * Math.sin(4 * this.getL0())) / 1000;
     }
 
     private Double getLatitudeRadians() {
